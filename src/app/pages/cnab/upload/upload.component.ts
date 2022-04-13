@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -49,7 +49,7 @@ export class UploadComponent implements OnInit {
     if (file) {
       this.fileName = file.name;
       this.formulario.value.file = file;
-      this.formData.append("file", file);
+        this.formData.append("cnab", file);
     }
   }
 
@@ -59,20 +59,18 @@ export class UploadComponent implements OnInit {
         duration: this.durationInSeconds * 1000,
       });
     }
-    console.log(this.formData);
-    const upload$ = this.http.post("http://localhost:8080/cnab/upload", this.formData, {
+    const upload$ = this.http.post("/api/thumbnail-upload", this.formData, {
       reportProgress: true,
-      observe: "response",
-      responseType: "text",
+      observe: 'events'
     })
     .pipe(
         finalize(() => this.reset())
     );
   
     this.uploadSub = upload$.subscribe(event => {
-      // if (event.type == HttpEventType.UploadProgress) {
-      //   this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-      // }
+      if (event.type == HttpEventType.UploadProgress) {
+        this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+      }
       if(this.uploadProgress == 100){
         this.snackBar.openFromComponent(SnackBarComponent, {
           duration: this.durationInSeconds * 1000,
