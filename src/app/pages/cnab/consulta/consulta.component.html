@@ -1,1 +1,35 @@
-<p>consulta works!</p>
+<mat-accordion class="example-headers-align" multi *ngFor="let cnab of cnabs">
+    <mat-expansion-panel (opened)="calcularSaldo(cnab.nomeLoja)">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{cnab.nomeLoja}}
+            </mat-panel-title>
+            <mat-panel-description>
+                {{cnab.representanteLoja}}
+                
+            </mat-panel-description>
+            Saldo: <p>{{valorTotal}}</p>
+        </mat-expansion-panel-header>
+        <mat-grid-list cols="2" rowHeight="2:1" *ngFor="let cnabDetalhe of cnabs">
+            <mat-grid-tile *ngIf="cnabDetalhe.nomeLoja === cnab.nomeLoja" >
+
+                <mat-card >
+                    <mat-card-subtitle>{{cnabDetalhe.cpf}}</mat-card-subtitle>
+                    <p><strong>Tipo da Transação:</strong>{{cnabDetalhe.tipo.descricao}}</p>
+                    <p><strong>Data e Hora da Transação: </strong>{{cnabDetalhe.dataHoraTransacao}}</p>
+                    <p><strong>Valor: </strong>{{cnab.valor}} </p>
+                    <p><strong>Número do Cartão: </strong>{{cnab.numeroCartao}}</p>
+        
+                    <mat-card-actions align="end">
+                        <!-- <button type="submit" mat-flat-buttoncolor="accent" class="upload-btn distance-button-send"
+                            (click)="enviarArquivo()">
+                            <mat-icon>send</mat-icon>
+                            Enviar
+                        </button> -->
+                    </mat-card-actions>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>    
+    </mat-expansion-panel>
+</mat-accordion>
+
